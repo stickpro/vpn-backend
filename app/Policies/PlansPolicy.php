@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Plans;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -15,7 +15,7 @@ class PlansPolicy
         
     }
 
-    public function view(User $user, Plans $plans)
+    public function view(User $user, Plan $plans)
     {
     }
 
@@ -23,19 +23,19 @@ class PlansPolicy
     {
     }
 
-    public function update(User $user, Plans $plans)
+    public function update(User $user, Plan $plans)
     {
     }
 
-    public function delete(User $user, Plans $plans)
+    public function delete(User $user, Plan $plans)
     {
     }
 
-    public function restore(User $user, Plans $plans)
+    public function restore(User $user, Plan $plans)
     {
     }
 
-    public function forceDelete(User $user, Plans $plans)
+    public function forceDelete(User $user, Plan $plans)
     {
     }
 }
