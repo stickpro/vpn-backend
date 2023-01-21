@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PlanController extends Controller
+class PlansController extends Controller
 {
     public function index()
     {
