@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('ip')->unique();
             $table->string('name');
+            $table->string('country', 4);
             $table->integer('max_users')->default(0);
             $table->softDeletes();
             $table->timestamps();
