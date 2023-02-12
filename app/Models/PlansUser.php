@@ -11,17 +11,16 @@ use Illuminate\Support\Carbon;
 class PlansUser extends Model
 {
     use SoftDeletes;
+
     protected $guarded = [];
     protected $casts = [
-            'is_paid'      => 'boolean',
-            'is_recurring' => 'boolean',
+            'is_paid'       => 'boolean',
+            'is_recurring'  => 'boolean',
+            'start_at'      => 'datetime',
+            'expiration_at' => 'datetime',
+            'cancelled_on'  => 'datetime'
     ];
 
-    protected $dates = [
-            'start_at',
-            'expiration_at',
-            'cancelled_on'
-    ];
 
     /**
      * @return BelongsTo
@@ -38,27 +37,33 @@ class PlansUser extends Model
     {
         return $this->hasMany(User::class, 'user_id');
     }
+
     /* scope start */
     public function scopePaid($query)
     {
         return $query->where('is_paid', true);
     }
+
     public function scopeUnpaid($query)
     {
         return $query->where('is_paid', false);
     }
+
     public function scopeRecurring($query)
     {
         return $query->where('is_recurring', true);
     }
+
     public function scopeExpired($query)
     {
         return $query->where('expiration_at', '<', now()->toDateTime());
     }
+
     public function scopeCancelled($query)
     {
         return $query->whereNotNull('cancelled_on');
     }
+
     public function scopeNotCancelled($query)
     {
         return $query->whereNull('cancelled_on');
@@ -93,7 +98,7 @@ class PlansUser extends Model
      */
     public function isActive(): bool
     {
-        return (bool) ($this->hasStarted() && ! $this->hasExpired());
+        return (bool) ($this->hasStarted() && !$this->hasExpired());
     }
 
     /**

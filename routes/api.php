@@ -15,11 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+/*
+ * Route without auth
+ *
+ * */
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'createUser']);
     Route::post('/login', [AuthController::class, 'loginUser']);
 });
+
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
