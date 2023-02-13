@@ -7,6 +7,7 @@ use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Resources\ErrorResource;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -39,5 +40,9 @@ class AuthController extends Controller
         } else {
             return  ErrorResource::make(message: 'The provided credentials do not match our records.');
         }
+    }
+
+    public function userInfo(Authenticatable $auth) {
+        return JsonResource::make($auth);
     }
 }
