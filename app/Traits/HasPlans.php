@@ -5,7 +5,7 @@ namespace App\Traits;
 use App\Events\NewSubscriptionEvent;
 use App\Events\UpgradeSubscriptionEvent;
 use App\Models\Plan;
-use App\Models\PlansUser;
+use App\Models\UserPlan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\ValidationException;
@@ -47,7 +47,7 @@ trait HasPlans
     }
 
     /**
-     * @return PlansUser|mixed|null
+     * @return UserPlan|mixed|null
      */
     public function lastActiveSubscription(): mixed
     {
@@ -99,7 +99,7 @@ trait HasPlans
             throw ValidationException::withMessages([__('You have active plan')]);
         }
 
-        $subscription = $this->subscriptions()->save(new PlansUser([
+        $subscription = $this->subscriptions()->save(new UserPlan([
                 'plan_id' => $plan->id,
                 'start_at' => now()->subSeconds(1),
                 'expiration_at' => now()->addDays($duration),
@@ -168,7 +168,7 @@ trait HasPlans
             return $activeSubscription;
         }
 
-        return $this->subscriptions()->save(new PlansUser([
+        return $this->subscriptions()->save(new UserPlan([
                 'plan_id' => $activeSubscription->plan_id,
                 'start_at' => now()->parse($activeSubscription->expires_on),
                 'expiration_at' => now()->parse($activeSubscription->expires_on)->addDays($duration),

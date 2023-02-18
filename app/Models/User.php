@@ -54,7 +54,7 @@ class User extends Authenticatable
      */
     public function subscriptions(): HasMany
     {
-        return $this->hasMany(PlansUser::class, 'user_id');
+        return $this->hasMany(UserPlan::class, 'user_id');
     }
 
 

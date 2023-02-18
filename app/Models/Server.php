@@ -10,6 +10,7 @@ class Server extends Model
     use SoftDeletes;
     protected $fillable = [
             'ip',
+            'auth_token',
             'name',
             'max_users'
     ];

@@ -7,13 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
-        Schema::create('servers', function (Blueprint $table) {
+        Schema::create('user_configs', function (Blueprint $table) {
             $table->id();
-            $table->string('ip')->unique();
-            $table->string('auth_token');
-            $table->string('name');
-            $table->string('country', 4);
-            $table->integer('max_users')->default(0);
+            $table->foreignId('user_id')->constrained();
+            $table->json('data')->nullable(false);
+            $table->text('qr_code')->nullable(false);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -21,6 +19,6 @@ return new class extends Migration {
 
     public function down()
     {
-        Schema::dropIfExists('servers');
+        Schema::dropIfExists('user_configs');
     }
 };
