@@ -11,6 +11,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserConfigController extends Controller
 {
+    public function index(Request $request) {
+        return JsonResource::make($request->user()->userConfigs()->get());
+    }
     public function store(Request $request)
     {
         $server = Server::where('id', $request->input('id'))->first();

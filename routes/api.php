@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Plans\PlanController;
 use App\Http\Controllers\Api\Plans\PlanUserController;
+use App\Http\Controllers\Api\Users\UserConfigController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,7 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('user')->middleware('auth:sanctum')->group(function () {
    Route::apiResource('plans', PlanUserController::class);
+   Route::apiResource('config', UserConfigController::class);
 });
 
 Route::apiResource('plans', PlanController::class);

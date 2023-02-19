@@ -20,12 +20,13 @@ class ServerService
     public function createNewPeer(User $user): \Illuminate\Support\Collection
     {
         $data = $this->client->post('/api/v1/peers/', [
-                'name'  => $user->name,
-                'email' => $user->email
+                'name'           => $user->name,
+                'email'          => $user->email,
+                'allowed_ips'    => ["0.0.0.0/0"],
+                'use_server_dns' => true
         ])->collect();
-
-
-
+        Log::info($data);
+        $user->createUserConfig(json_encode($data['Peer']), $data['QRCode']);
         return $data;
     }
 }

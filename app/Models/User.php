@@ -3,14 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Events\NewSubscriptionEvent;
 use App\Traits\HasPlans;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -24,9 +21,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+            'name',
+            'email',
+            'password',
     ];
 
     /**
@@ -35,8 +32,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+            'password',
+            'remember_token',
     ];
 
     /**
@@ -45,7 +42,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+            'email_verified_at' => 'datetime',
     ];
 
     /**
@@ -57,9 +54,26 @@ class User extends Authenticatable
         return $this->hasMany(UserPlan::class, 'user_id');
     }
 
-    public function serverConfigs(): HasMany
+    /**
+     * @return HasMany
+     */
+    public function userConfigs(): HasMany
     {
         return $this->hasMany(UserConfig::class, 'user_id');
+    }
+
+    /**
+     * @param  string  $data
+     * @param  string  $qrcode
+     * @return mixed
+     */
+    public function createUserConfig(string $data, string $qrcode): UserConfig|false
+    {
+        return $this->userConfigs()->save(new UserConfig([
+                'data' => $data,
+                'qr_code' => $qrcode
+        ]));
+
     }
 
 }

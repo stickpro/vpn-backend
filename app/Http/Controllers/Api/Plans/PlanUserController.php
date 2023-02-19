@@ -25,7 +25,7 @@ class PlanUserController extends Controller
         $plan = Plan::where('id', $request->input('plan_id'))->firstOrFail();
         $user = $request->user();
 
-        if($this->user->balance < $plan->price) {
+        if($user->balance < $plan->price) {
             throw new HttpException(402, 'Insufficient funds');
         }
 
