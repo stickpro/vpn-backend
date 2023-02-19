@@ -10,8 +10,13 @@ class PlanController extends Controller
 {
     public function index()
     {
-        $plans = Plan::paginate();
+        $plans = Plan::orderBy('id')->simplePaginate();
         return JsonResource::make($plans);
+    }
+
+    public function store()
+    {
+
     }
 
     public function show(Plan $plan)

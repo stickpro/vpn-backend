@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('device_count')->default(1);
             $table->decimal('price', 8, 2);
             $table->softDeletes();
             $table->timestamps();

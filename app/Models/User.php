@@ -57,5 +57,9 @@ class User extends Authenticatable
         return $this->hasMany(UserPlan::class, 'user_id');
     }
 
+    public function serverConfigs(): HasMany
+    {
+        return $this->hasMany(UserConfig::class, 'user_id');
+    }
 
 }

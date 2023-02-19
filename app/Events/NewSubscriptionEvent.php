@@ -10,7 +10,7 @@ class NewSubscriptionEvent
 {
     use SerializesModels;
 
-    public User $model;
+    public User $user;
     public UserPlan $subscription;
 
     /**
@@ -18,9 +18,9 @@ class NewSubscriptionEvent
      * @param  UserPlan  $subscription Subscription the model has subscribed to.
      * @return void
      */
-    public function __construct(User $model, UserPlan $subscription)
+    public function __construct(User $user, UserPlan $subscription)
     {
-        $this->model = $model;
+        $this->user = $user;
         $this->subscription = $subscription;
     }
 }
