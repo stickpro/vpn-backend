@@ -10,8 +10,10 @@ return new class extends Migration {
         Schema::create('user_configs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('server_id')->constrained();
+            $table->string('peer_id');
             $table->json('data')->nullable(false);
-            $table->text('qr_code')->nullable(false);
+            $table->text('peer_data')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

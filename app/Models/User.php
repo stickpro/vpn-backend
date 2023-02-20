@@ -67,13 +67,14 @@ class User extends Authenticatable
      * @param  string  $qrcode
      * @return mixed
      */
-    public function createUserConfig(string $data, string $qrcode): UserConfig|false
+    public function createUserConfig(object $data, Server $server): UserConfig|false
     {
         return $this->userConfigs()->save(new UserConfig([
-                'data' => $data,
-                'qr_code' => $qrcode
+                'peer_id'   => $data['Peer']['id'],
+                'server_id' => $server->id,
+                'data'      => json_encode($data['Peer']),
+                'peer_data' => $data['PeerConfig']
         ]));
-
     }
 
 }
