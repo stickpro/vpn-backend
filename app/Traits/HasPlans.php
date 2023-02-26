@@ -114,7 +114,14 @@ trait HasPlans
         return $subscription;
     }
 
-    public function upgradeCurrentPlanTo($newPlan, int $duration = 30, bool $startFromNow = true, bool $isRecurring = true)
+    /**
+     * @param $newPlan
+     * @param  int  $duration
+     * @param  bool  $startFromNow
+     * @param  bool  $isRecurring
+     * @return false|Model|mixed
+     */
+    public function upgradeCurrentPlanTo($newPlan, int $duration = 30, bool $startFromNow = true, bool $isRecurring = true): mixed
     {
         if (! $this->hasActiveSubscription()) {
             return $this->subscribeTo($newPlan, $duration, $isRecurring);
@@ -141,7 +148,13 @@ trait HasPlans
         return $subscription;
     }
 
-    public function extendCurrentSubscriptionWith(int $duration = 30, bool $startFromNow = true, bool $isRecurring = true)
+    /**
+     * @param  int  $duration
+     * @param  bool  $startFromNow
+     * @param  bool  $isRecurring
+     * @return false|Model|mixed
+     */
+    public function extendCurrentSubscriptionWith(int $duration = 30, bool $startFromNow = true, bool $isRecurring = true): mixed
     {
         if (! $this->hasActiveSubscription()) {
             if ($this->hasSubscriptions()) {
@@ -176,5 +189,13 @@ trait HasPlans
                 'is_recurring' => $isRecurring,
                 'recurring_each_days' => $duration,
         ]));
+    }
+
+    /**
+     * @return mixed
+     */
+    public function activePlanInfo(): Plan
+    {
+        return $this->activeSubscription()->plan()->first();
     }
 }

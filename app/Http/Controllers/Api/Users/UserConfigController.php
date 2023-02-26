@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Log;
 
 class UserConfigController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(UserConfig::class, 'config');
+    }
+
     public function index(Request $request)
     {
         return JsonResource::make($request->user()->userConfigs()->get());
