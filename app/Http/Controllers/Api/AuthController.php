@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\LoginRequest;
-use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\AuthRequest;
 use App\Http\Resources\ErrorResource;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -14,18 +15,14 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function createUser(RegisterRequest $request)
+    public function loginUser(AuthRequest $request, AuthService $service)
     {
-        $user = User::create([
-                'name'     => $request->input('name'),
-                'email'    => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
-        ]);
+        $user = $service->auth($request->input('phone'));
 
         return JsonResource::make(['token' => $user->createToken('inner')->plainTextToken]);
     }
 
-    public function loginUser(LoginRequest $request)
+    public function createUser(AuthRequest $request, AuthService $service)
     {
         $credentials = [
                 'email' => $request->input('email'),
