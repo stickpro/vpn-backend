@@ -17,26 +17,13 @@ class AuthController extends Controller
 {
     public function loginUser(AuthRequest $request, AuthService $service)
     {
-        $user = $service->auth($request->input('phone'));
+        if (empty($request->input('authCode'))) {
+            $service->sendCode($request->input('phone'));
+            return JsonResource::make(['message' => 'Code Send']);
+        }
+        $user = $service->auth($request->input('phone'), $request->input('authCode'));
 
         return JsonResource::make(['token' => $user->createToken('inner')->plainTextToken]);
-    }
-
-    public function createUser(AuthRequest $request, AuthService $service)
-    {
-        $credentials = [
-                'email' => $request->input('email'),
-                'password' => $request->input('password'),
-        ];
-
-        if (Auth::attempt($credentials)) {
-            return JsonResource::make([
-                    'user' => Auth::user(),
-                    'token' => Auth::user()->createToken('inner')->plainTextToken,
-            ]);
-        } else {
-            return  ErrorResource::make(message: 'The provided credentials do not match our records.');
-        }
     }
 
     public function userInfo(Authenticatable $auth) {

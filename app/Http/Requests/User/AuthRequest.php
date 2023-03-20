@@ -10,7 +10,7 @@ class AuthRequest extends FormRequest
     {
         return [
             'phone' => ['required'],
-            'auth_code' => ['sometimes', 'min:4', 'max:4'],
+            'authCode' => ['sometimes', 'min:4', 'max:4'],
         ];
     }
 

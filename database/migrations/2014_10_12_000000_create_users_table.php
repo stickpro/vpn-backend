@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('email')->unique()->nullable();
-            $table->bigInteger('phone')->unique();
+            $table->string('phone', 32)->unique();
             $table->integer('auth_code')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();

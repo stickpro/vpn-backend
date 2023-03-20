@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class AuthService
 {
@@ -13,32 +14,49 @@ class AuthService
         $this->client->baseUrl(config('services.flash_call.domain'));
     }
 
-    public function auth(int $phone): User
+    /**
+     * @param string $phone
+     * @param int $code
+     * @return User
+     */
+    public function auth(string $phone, int $code): User
     {
-        $user = User::firstOrCreate(
-            ['phone' => $phone],
-        );
-        $this->sendCode($user->phone);
+        $user = User::where('phone', '=', $phone)->firstOrFail();
+        if ($user->auth_code !== $code) {
+            throw ValidationException::withMessages("Невалидный код");
+        }
+        $user->update(['auth_code' => null]);
+
         return $user;
     }
 
-    private function sendCode(string $phone): bool
+    /**
+     * @param string $phone
+     * @return bool
+     */
+    public function sendCode(string $phone): bool
     {
+        $user = $this->createOrFirstUser($phone);
+
         $response = $this->client
             ->withUrlParameters([
                 'endpoint' => 'voice',
                 'apiKey' => config('services.flash_call.apiKey'),
-                'phone' => $phone
+                'phone' => $user->phone
             ])
             ->get('{+endpoint}/{apiKey}/{phone}/');
 
-        Log::info($response);
-
         if ($response->successful()) {
-            Log::info($response->collect());
-            return $response->collect();
+            return $user->update(['auth_code' => intval($response->collect('code')->first())]);
         }
 
         return false;
+    }
+
+    private function createOrFirstUser(string $phone): User
+    {
+        return User::firstOrCreate(
+            ['phone' => $phone],
+        );
     }
 }

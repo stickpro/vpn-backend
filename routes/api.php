@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\Plans\PlanController;
 use App\Http\Controllers\Api\Plans\PlanUserController;
 use App\Http\Controllers\Api\Users\UserConfigController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\Servers\ServerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,19 +23,19 @@ use Illuminate\Support\Facades\Route;
  *
  * */
 Route::prefix('auth')->group(function () {
-    Route::post('/register', [AuthController::class, 'createUser'])->name('auth.create-user');
     Route::post('/login', [AuthController::class, 'loginUser'])->name('auth.login-user');
 });
 
 Route::prefix('user')->middleware('auth:sanctum')->group(function () {
    Route::apiResource('plans', PlanUserController::class);
    Route::apiResource('config', UserConfigController::class);
+   Route::get('/info', [AuthController::class, 'userInfo'])->name('auth.info-user');
+
 });
 
 Route::apiResource('plans', PlanController::class);
 
-
-Route::middleware('auth:sanctum')->prefix('user')->group(function () {
-    Route::get('/info', [AuthController::class, 'userInfo'])->name('auth.info-user');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/servers', [ServerController::class, 'index']);
 });
 
